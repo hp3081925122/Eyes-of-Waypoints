@@ -148,6 +148,15 @@ dependencies {
     // Xaero's Minimap 提供客户端路径点 API，使用当前已核对的 CurseForge 文件。
     implementation fg.deobf("curse.maven:xaeros-minimap-263420:${xaeros_minimap_file_id}")
 
+    // L_Ender's Cataclysm 提供定位之眼及其结构标签 API。
+    implementation fg.deobf("curse.maven:lendercataclysm-551586:${lendercataclysm_file_id}")
+
+      // Legendary Monsters 提供其结构与 Boss 内容的兼容 API。
+      implementation fg.deobf("curse.maven:legendary-monsters-944035:${legendary_monsters_file_id}")
+
+      // EEEAB's Mobs 提供血色之眼和机核之眼的结构定位 API。
+      implementation fg.deobf("curse.maven:eeeabs-mobs-921600:${eeeabs_mobs_file_id}")
+
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
@@ -172,12 +181,18 @@ dependencies {
 // When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.named('processResources', ProcessResources).configure {
+    // 确保含有中文翻译和注释的资源始终按 UTF-8 处理。
+    filteringCharset = 'UTF-8'
+
     var replaceProperties = [minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
                              forge_version       : forge_version, forge_version_range: forge_version_range,
                              loader_version_range: loader_version_range,
                              mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
                              mod_authors         : mod_authors, mod_description: mod_description,
-                             xaeros_minimap_version_range: xaeros_minimap_version_range]
+                               xaeros_minimap_version_range: xaeros_minimap_version_range,
+                               lendercataclysm_version_range: lendercataclysm_version_range,
+                             legendary_monsters_version_range: legendary_monsters_version_range,
+                             eeeabs_mobs_version_range: eeeabs_mobs_version_range]
 
     inputs.properties replaceProperties
 

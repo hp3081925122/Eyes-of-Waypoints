@@ -21,11 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-// 在客户端将服务端确认的末影之眼目标写入 Xaero's Minimap 当前世界。
+// 在客户端将服务端确认的定位之眼目标写入 Xaero's Minimap 当前世界。
 @Mod.EventBusSubscriber(modid = Eyes_of_waypoints.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class XaeroWaypointHandler {
-    private static final String WAYPOINT_SYMBOL = "E";
-    private static final List<BlockPos> PENDING_TARGETS = new ArrayList<>();
+    private static final List<EnderEyeWaypointPacket.ReceivedEvent> PENDING_REQUESTS = new ArrayList<>();
 
     private XaeroWaypointHandler() {
     }
@@ -33,8 +32,8 @@ public final class XaeroWaypointHandler {
     // 接收网络事件，并在 Xaero 会话尚未完成初始化时保留坐标等待下一帧。
     @SubscribeEvent
     public static void onWaypointReceived(EnderEyeWaypointPacket.ReceivedEvent event) {
-        if (!PENDING_TARGETS.contains(event.getTarget())) {
-            PENDING_TARGETS.add(event.getTarget());
+        if (!containsPendingRequest(event)) {
+            PENDING_REQUESTS.add(event);
         }
         tryCreateWaypoints();
     }
@@ -42,7 +41,7 @@ public final class XaeroWaypointHandler {
     // 每客户端帧尝试处理待创建坐标，覆盖 Xaero 会话延迟初始化的情况。
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && !PENDING_TARGETS.isEmpty()) {
+        if (event.phase == TickEvent.Phase.END && !PENDING_REQUESTS.isEmpty()) {
             tryCreateWaypoints();
         }
     }
@@ -66,17 +65,19 @@ public final class XaeroWaypointHandler {
             return;
         }
 
-        for (int index = PENDING_TARGETS.size() - 1; index >= 0; index--) {
-            BlockPos target = PENDING_TARGETS.get(index);
-            if (!containsWaypoint(waypointWorld, target)) {
-                String name = Component.translatable("waypoint.eyes_of_waypoints.stronghold").getString();
+        for (int index = PENDING_REQUESTS.size() - 1; index >= 0; index--) {
+            EnderEyeWaypointPacket.ReceivedEvent request = PENDING_REQUESTS.get(index);
+            BlockPos target = request.getTarget();
+            String symbol = request.getSymbol();
+            if (!containsWaypoint(waypointWorld, target, symbol)) {
+                String name = Component.translatable(request.getNameKey()).getString();
                 Waypoint waypoint = new Waypoint(
                         target.getX(),
                         target.getY(),
                         target.getZ(),
                         name,
-                        WAYPOINT_SYMBOL,
-                        WaypointColor.YELLOW,
+                        symbol,
+                        parseColor(request.getColorName()),
                         WaypointPurpose.NORMAL,
                         false,
                         false
@@ -84,28 +85,51 @@ public final class XaeroWaypointHandler {
                 waypointSet.add(waypoint);
                 saveWaypoints(waypointsManager, waypointWorld);
                 Eyes_of_waypoints.LOGGER.debug(
-                        "Created Xaero waypoint for vanilla Eye of Ender at x={}, y={}, z={}",
+                        "Created Xaero waypoint '{}' at x={}, y={}, z={}",
+                        request.getNameKey(),
                         target.getX(),
                         target.getY(),
                         target.getZ()
                 );
             }
-            PENDING_TARGETS.remove(index);
+            PENDING_REQUESTS.remove(index);
         }
     }
 
-    // 检查当前世界的所有路径点集合，避免同一要塞被重复添加。
-    private static boolean containsWaypoint(WaypointWorld waypointWorld, BlockPos target) {
+    // 检查待处理列表，避免同一次定位结果重复加入队列。
+    private static boolean containsPendingRequest(EnderEyeWaypointPacket.ReceivedEvent request) {
+        for (EnderEyeWaypointPacket.ReceivedEvent pending : PENDING_REQUESTS) {
+            if (pending.getTarget().equals(request.getTarget())
+                    && pending.getSymbol().equals(request.getSymbol())
+                    && pending.getNameKey().equals(request.getNameKey())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 检查当前世界的所有路径点集合，避免同一结构被重复添加。
+    private static boolean containsWaypoint(WaypointWorld waypointWorld, BlockPos target, String symbol) {
         for (WaypointSet waypointSet : waypointWorld.getSets().values()) {
             for (Waypoint waypoint : waypointSet.getWaypoints()) {
                 if (waypoint.getX() == target.getX()
                         && waypoint.getZ() == target.getZ()
-                        && WAYPOINT_SYMBOL.equals(waypoint.getSymbol())) {
+                        && symbol.equals(waypoint.getSymbol())) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    // 将网络包中的颜色名称转换为 Xaero 颜色，未知值回退到黄色。
+    private static WaypointColor parseColor(String colorName) {
+        try {
+            return WaypointColor.valueOf(colorName);
+        } catch (IllegalArgumentException exception) {
+            Eyes_of_waypoints.LOGGER.warn("Unknown Xaero waypoint color '{}', using YELLOW", colorName);
+            return WaypointColor.YELLOW;
+        }
     }
 
     // 保存 Xaero 路径点文件，保存失败时只记录英文日志并保留游戏运行。

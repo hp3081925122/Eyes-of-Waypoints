@@ -8,7 +8,7 @@ import org.hp.eyes_of_waypoints.Eyes_of_waypoints;
 
 // 集中注册本模组使用的 Forge 网络数据包。
 public final class NetworkHandler {
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
     private static int nextPacketId;
 
     // 创建仅允许服务端发送到客户端的坐标同步通道。
