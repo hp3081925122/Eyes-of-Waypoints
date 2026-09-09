@@ -1,3 +1,11 @@
 {
-  "waypoint.eyes_of_waypoints.stronghold": "Stronghold"
+  "waypoint.eyes_of_waypoints.stronghold": "Stronghold",
+  "waypoint.eyes_of_waypoints.ancient_factory": "Ancient Factory",
+  "waypoint.eyes_of_waypoints.burning_arena": "Burning Arena",
+  "waypoint.eyes_of_waypoints.ruined_citadel": "Ruined Citadel",
+  "waypoint.eyes_of_waypoints.soul_black_smith": "Soul Blacksmith",
+  "waypoint.eyes_of_waypoints.sunken_city": "Sunken City",
+  "waypoint.eyes_of_waypoints.cursed_pyramid": "Cursed Pyramid",
+  "waypoint.eyes_of_waypoints.frosted_prison": "Frosted Prison",
+  "waypoint.eyes_of_waypoints.acropolis": "Acropolis"
 }

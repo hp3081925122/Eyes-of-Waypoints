@@ -67,6 +67,8 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     // 仅把 Xaero 作为外部必需模组接入，不将其打包进本模组 JAR。
     implementation "curse.maven:xaeros-minimap-263420:${xaeros_minimap_file_id}"
+    // 使用 1.21.1 NeoForge 版 L_Ender's Cataclysm 的公开物品和结构标签。
+    implementation "curse.maven:lendercataclysm-551586:${lendercataclysm_file_id}"
 }
 
 // 处理 NeoForge 模组元数据并固定资源编码。
@@ -80,6 +82,7 @@ tasks.named('processResources', ProcessResources).configure {
             neo_version_range           : neo_version_range,
             loader_version_range        : loader_version_range,
             xaeros_minimap_version_range: xaeros_minimap_version_range,
+            lendercataclysm_version_range: lendercataclysm_version_range,
             mod_id                      : mod_id,
             mod_name                    : mod_name,
             mod_license                 : mod_license,

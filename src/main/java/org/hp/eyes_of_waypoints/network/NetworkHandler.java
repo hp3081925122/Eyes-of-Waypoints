@@ -7,7 +7,7 @@ import org.hp.eyes_of_waypoints.Eyes_of_waypoints;
 
 // 集中注册 NeoForge 的客户端目标坐标负载。
 public final class NetworkHandler {
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
 
     private NetworkHandler() {
     }
@@ -19,7 +19,12 @@ public final class NetworkHandler {
                 EnderEyeWaypointPayload.TYPE,
                 EnderEyeWaypointPayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> NeoForge.EVENT_BUS.post(
-                        new EnderEyeWaypointPayload.ReceivedEvent(payload.target())
+                        new EnderEyeWaypointPayload.ReceivedEvent(
+                                payload.target(),
+                                payload.nameKey(),
+                                payload.symbol(),
+                                payload.colorName()
+                        )
                 ))
         );
     }
