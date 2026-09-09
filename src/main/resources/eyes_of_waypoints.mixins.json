@@ -4,10 +4,8 @@
   "package": "org.hp.eyes_of_waypoints.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "eyes_of_waypoints.refmap.json",
-  "mixins": [
-  ],
-  "client": [
-  ],
+  "mixins": [],
+  "client": [],
   "injectors": {
     "defaultRequire": 1
   },

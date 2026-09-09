@@ -2,14 +2,16 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         maven {
-            name = 'MinecraftForge'
-            url = 'https://maven.minecraftforge.net/'
+            name = 'NeoForge'
+            url = 'https://maven.neoforged.net/releases'
         }
     }
 }
 
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+    // 为 Java 25 工具链提供 NeoForge 模板所需的解析支持。
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
 
-rootProject.name = 'eyes-of-waypoints'
+// 使用独立的 26.1.2 NeoForge 子项目名称。
+rootProject.name = 'eyes-of-waypoints-26.1.2-neoforge'
