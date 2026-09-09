@@ -32,17 +32,3 @@ type = "required"
 versionRange = "${xaeros_minimap_version_range}"
 ordering = "AFTER"
 side = "CLIENT"
-
-[[dependencies.${mod_id}]]
-modId = "cataclysm"
-type = "required"
-versionRange = "${lendercataclysm_version_range}"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.${mod_id}]]
-modId = "legendary_monsters"
-type = "required"
-versionRange = "${legendary_monsters_version_range}"
-ordering = "AFTER"
-side = "BOTH"
