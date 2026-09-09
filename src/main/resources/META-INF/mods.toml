@@ -49,30 +49,6 @@ versionRange = "${xaeros_minimap_version_range}"
 ordering = "AFTER"
 side = "CLIENT"
 
-# Cataclysm 的定位之眼需要服务端查找其结构标签，因此依赖作用于两端。
-[[dependencies."${mod_id}"]]
-modId = "cataclysm"
-mandatory = true
-versionRange = "${lendercataclysm_version_range}"
-ordering = "AFTER"
-side = "BOTH"
-
-# Legendary Monsters 的定位之眼需要服务端查找其结构标签，因此依赖作用于两端。
-[[dependencies."${mod_id}"]]
-modId = "legendary_monsters"
-mandatory = true
-versionRange = "${legendary_monsters_version_range}"
-ordering = "AFTER"
-side = "BOTH"
-
-# EEEAB's Mobs 的定位之眼需要服务端查找其结构标签，因此依赖作用于两端。
-[[dependencies."${mod_id}"]]
-modId = "eeeabsmobs"
-mandatory = true
-versionRange = "${eeeabs_mobs_version_range}"
-ordering = "AFTER"
-side = "BOTH"
-
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies."${mod_id}"]] #optional
 # the modid of the dependency
