@@ -69,6 +69,8 @@ dependencies {
     implementation "curse.maven:xaeros-minimap-263420:${xaeros_minimap_file_id}"
     // 使用 1.21.1 NeoForge 版 L_Ender's Cataclysm 的公开物品和结构标签。
     implementation "curse.maven:lendercataclysm-551586:${lendercataclysm_file_id}"
+    // 使用 1.21.1 NeoForge 版 Legendary Monsters 的定位眼物品和结构标签。
+    implementation "curse.maven:legendary-monsters-944035:${legendary_monsters_file_id}"
 }
 
 // 处理 NeoForge 模组元数据并固定资源编码。
@@ -83,6 +85,7 @@ tasks.named('processResources', ProcessResources).configure {
             loader_version_range        : loader_version_range,
             xaeros_minimap_version_range: xaeros_minimap_version_range,
             lendercataclysm_version_range: lendercataclysm_version_range,
+            legendary_monsters_version_range: legendary_monsters_version_range,
             mod_id                      : mod_id,
             mod_name                    : mod_name,
             mod_license                 : mod_license,
